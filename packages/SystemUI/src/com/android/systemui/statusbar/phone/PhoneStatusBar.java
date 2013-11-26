@@ -840,6 +840,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return mTextHolder.getMeasuredWidth() < maxWidth;
     }
 
+    private void forceAddNavigationBar() {
+        // If we have no Navbar view and we should have one, create it
+        if (mNavigationBarView != null) {
+            return;
+        }
+
     public void toggleReminderFlipper(boolean active) {
         if (mReminderEnabled) {
             if (mCurrOrientation == Configuration.ORIENTATION_LANDSCAPE) {

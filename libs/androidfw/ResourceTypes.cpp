@@ -5438,9 +5438,7 @@ status_t ResTable::parsePackage(ResTable_package* const pkg,
 
 status_t ResTable::createIdmap(const ResTable& overlay,
         uint32_t targetCrc, uint32_t overlayCrc,
-        time_t targetMtime, time_t overlayMtime,
         const char* targetPath, const char* overlayPath,
-        Vector<String8>& targets, Vector<String8>& overlays,
         void** outData, size_t* outSize) const
 {
     // see README for details on the format of map
@@ -5454,6 +5452,11 @@ status_t ResTable::createIdmap(const ResTable& overlay,
         return UNKNOWN_ERROR;
     }
 
+    Vector<Vector<uint32_t> > map;
+    // overlaid packages are assumed to contain only one package group
+    const PackageGroup* pg = mPackageGroups[0];
+    const Package* pkg = pg->packages[0];
+    size_t typeCount = pkg->types.size();
     // starting size is header + first item (number of types in map)
     *outSize = (IDMAP_HEADER_SIZE + 1) * sizeof(uint32_t);
     // overlay packages are assumed to contain only one package group
@@ -5577,8 +5580,6 @@ status_t ResTable::createIdmap(const ResTable& overlay,
     *data++ = htodl(IDMAP_MAGIC);
     *data++ = htodl(targetCrc);
     *data++ = htodl(overlayCrc);
-    *data++ = htodl(targetMtime);
-    *data++ = htodl(overlayMtime);
     const char* paths[] = { targetPath, overlayPath };
     for (int j = 0; j < 2; ++j) {
         char* p = (char*)data;
@@ -5609,6 +5610,7 @@ status_t ResTable::createIdmap(const ResTable& overlay,
     }
     if (offset == mapSize) {
         ALOGW("idmap: no resources in overlay package present in base package\n");
+        return UNKNOWN_ERROR;
     }
     for (size_t i = 0; i < mapSize; ++i) {
         const Vector<uint32_t>& vector = map.itemAt(i);
@@ -5645,10 +5647,10 @@ bool ResTable::getIdmapInfo(const void* idmap, size_t sizeBytes,
         *pOverlayCrc = map[2];
     }
     if (pTargetPath) {
-        pTargetPath->setTo(reinterpret_cast<const char*>(map + 5));
+        pTargetPath->setTo(reinterpret_cast<const char*>(map + 3));
     }
     if (pOverlayPath) {
-        pOverlayPath->setTo(reinterpret_cast<const char*>(map + 5 + 256 / sizeof(uint32_t)));
+        pOverlayPath->setTo(reinterpret_cast<const char*>(map + 3 + 256 / sizeof(uint32_t)));
     }
     return true;
 }

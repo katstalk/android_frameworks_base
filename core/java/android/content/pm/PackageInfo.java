@@ -240,6 +240,14 @@ public class PackageInfo implements Parcelable {
     /** @hide */
     public String requiredAccountType;
 
+    /**
+     * What package, if any, this package will overlay.
+     *
+     * Package name of target package, or null.
+     * @hide
+     */
+    public String overlayTarget;
+
     public PackageInfo() {
     }
 
