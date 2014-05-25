@@ -1507,8 +1507,8 @@
     <string name="config_fastChargePath" translatable="false">/sys/kernel/fast_charge/force_fast_charge</string>
 
     <!-- Whether device has hardware buttons -->
-    <bool name="config_has_hardware_buttons">true</bool>
+    <bool name="config_has_hardware_buttons">false</bool>
 
     <!-- Whether device has advanced settings -->
-    <bool name="has_advanced_settings">true</bool>
+    <bool name="has_advanced_settings">false</bool>
 </resources>
