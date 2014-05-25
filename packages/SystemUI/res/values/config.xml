@@ -123,5 +123,10 @@
     <integer name="quick_settings_onthego_dialog_short_timeout">3000</integer>
     <integer name="quick_settings_onthego_dialog_long_timeout">6000</integer>
 
+    <!-- Whether device has hardware buttons -->
+    <bool name="config_has_hardware_buttons">true</bool>
+
+    <!-- Whether device has advanced settings -->
+    <bool name="has_advanced_settings">true</bool>
 </resources>
 
